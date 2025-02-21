@@ -101,6 +101,11 @@ export default function Home() {
           </CardContent>
         </Card>
       )}
+      <div className="flex items-center justify-center">
+        <small className="text-center tracking-tighter text-xs font-bold text-black/35 w-1/2 mt-10">
+          The backend of this application is hosted on Render which is on free trial. So the API Request might take around 40seconds to give the response. Please be Patient :)
+        </small>
+      </div>
     </div>
   );
 }
