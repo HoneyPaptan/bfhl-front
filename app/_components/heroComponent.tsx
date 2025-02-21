@@ -1,5 +1,6 @@
-// Frontend: Next.js (App Router) with ShadCN and react-select
+
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState } from "react";
 import axios from "axios";
@@ -51,10 +52,12 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
       });
       setResponseData(res.data);
-    } catch (err: any) {
-      console.error("API Error:", err.response?.data || err.message);
-      setError(err.response?.data?.detail || err.message || "Invalid JSON format or API error");
-    } finally {
+    }catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.detail || err.message || "Invalid JSON format or API error");
+      } else {
+        setError("An unknown error occurred");
+    }} finally {
       setLoading(false);
     }
   };
