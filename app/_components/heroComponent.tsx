@@ -8,19 +8,30 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import Select from "react-select";
 
-const options = [
+interface Option {
+  label: string;
+  value: string;
+}
+
+interface ResponseData {
+  alphabets?: string[];
+  numbers?: string[];
+  highest_alphabet?: string[];
+}
+
+const options: Option[] = [
   { label: "Alphabets", value: "alphabets" },
   { label: "Numbers", value: "numbers" },
   { label: "Highest Alphabet", value: "highest_alphabet" }
 ];
 
 export default function Home() {
-  const [jsonInput, setJsonInput] = useState("");
-  const [responseData, setResponseData] = useState(null);
-  const [error, setError] = useState(null);
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [loading, setLoading] = useState(false);
-  // handle api req
+  const [jsonInput, setJsonInput] = useState<string>("");
+  const [responseData, setResponseData] = useState<ResponseData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const handleSubmit = async () => {
     setError(null);
     setLoading(true);
@@ -29,19 +40,18 @@ export default function Home() {
       if (
         !parsedData.data ||
         !Array.isArray(parsedData.data) ||
-        !parsedData.data.every(item => typeof item === "string" || typeof item === "number")
+        !parsedData.data.every((item: string | number) => typeof item === "string" || typeof item === "number")
       ) {
         throw new Error("Invalid format: JSON should contain a 'data' key with an array of strings or numbers.");
       }
       
-      // Convert numbers to strings to match API expectations
-      parsedData.data = parsedData.data.map(item => item.toString());
+      parsedData.data = parsedData.data.map((item: string | number) => item.toString());
       
       const res = await axios.post("https://bfhl-api-qwo8.onrender.com/bfhl", parsedData, {
         headers: { "Content-Type": "application/json" },
       });
       setResponseData(res.data);
-    } catch (err) {
+    } catch (err: any) {
       console.error("API Error:", err.response?.data || err.message);
       setError(err.response?.data?.detail || err.message || "Invalid JSON format or API error");
     } finally {
