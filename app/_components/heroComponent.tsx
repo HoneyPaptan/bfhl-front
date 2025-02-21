@@ -20,7 +20,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  // handle api req
   const handleSubmit = async () => {
     setError(null);
     setLoading(true);
